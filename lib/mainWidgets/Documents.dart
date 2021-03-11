@@ -117,8 +117,9 @@ class StudentID extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          // textBaseline: TextBaseline.alphabetic,
           children: [
             Text(
               documents[i][0],

@@ -63,9 +63,16 @@ class _MainWidgetState extends State<MainWidget> {
           title: Text(
             title,
             style: TextStyle(
+              // shadows: [
+              //   Shadow(
+              //     color: Colors.red,
+              //     blurRadius: 20,
+              //   )
+              // ],
               color: Colors.black,
             ),
           ),
+          backgroundColor: myBlueGreyColor,
           leading: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Icon(
@@ -74,7 +81,6 @@ class _MainWidgetState extends State<MainWidget> {
               color: Colors.black,
             ),
           ),
-          backgroundColor: myBlueGreyColor,
           actions: [
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -132,13 +138,9 @@ class _MainWidgetState extends State<MainWidget> {
         // ---------------------------------------------------------------------
         // drawer: Drawer(
         //   child: ListView(
-        //     padding: EdgeInsets.zero,
-        //     children: <Widget>[
+        //     children: [
         //       DrawerHeader(
         //         child: Text('Drawer Header'),
-        //         decoration: BoxDecoration(
-        //           color: Colors.blue,
-        //         ),
         //       ),
         //       ListTile(
         //         title: Text('Item 1'),
