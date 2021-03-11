@@ -44,8 +44,17 @@ class _MainWidgetState extends State<MainWidget> {
     ];
     var mainPage = mainWidgets[pageNumber];
     var title = pageNumber == 0 ? '' : BottomNavBarItems[pageNumber][2];
+    var myGreyColor = documentsPageNumber != null
+        ? colors[documentsPageNumber]
+        : Colors.grey[350];
+    var myBlueGreyColor = documentsPageNumber != null
+        ? colors[documentsPageNumber]
+        : Colors.blueGrey[200];
 
     return MaterialApp(
+      theme: ThemeData(
+        primaryColor: myBlueGreyColor,
+      ),
       title: 'Дія',
       home: Scaffold(
         appBar: AppBar(
@@ -65,9 +74,7 @@ class _MainWidgetState extends State<MainWidget> {
               color: Colors.black,
             ),
           ),
-          backgroundColor: documentsPageNumber != null
-              ? colors[documentsPageNumber]
-              : Colors.blueGrey[200],
+          backgroundColor: myBlueGreyColor,
           actions: [
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -83,9 +90,7 @@ class _MainWidgetState extends State<MainWidget> {
           ],
         ),
         body: mainPage,
-        backgroundColor: documentsPageNumber != null
-            ? colors[documentsPageNumber]
-            : Colors.grey[350],
+        backgroundColor: myGreyColor,
         bottomNavigationBar: BottomNavigationBar(
           elevation: 0,
           selectedFontSize: 12,
@@ -94,9 +99,7 @@ class _MainWidgetState extends State<MainWidget> {
           selectedItemColor: Colors.black,
           unselectedItemColor: Colors.black,
           currentIndex: pageNumber,
-          backgroundColor: documentsPageNumber != null
-              ? colors[documentsPageNumber]
-              : Colors.grey[350],
+          backgroundColor: myGreyColor,
           items: [
             for (var i = 0; i < BottomNavBarItems.length; i++)
               BottomNavigationBarItem(

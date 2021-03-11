@@ -38,7 +38,7 @@ class Menu extends StatelessWidget {
                     Text(
                       MenuContent[index][1],
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 19,
                         fontFamily: 'Roboto',
                       ),
                     ),

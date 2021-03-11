@@ -16,7 +16,6 @@ class Messages extends StatelessWidget {
             '👌 \n У вас немає нових \n повідомлень.',
             style: TextStyle(
               fontSize: 30,
-              fontWeight: FontWeight.bold,
             ),
           ),
         ],
