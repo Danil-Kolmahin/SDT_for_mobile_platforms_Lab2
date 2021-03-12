@@ -11,6 +11,13 @@
 6) *Бонус* анімований BottomNavigationBar
 7) *Бонус* анімований Hero віджет
 
+## Realization
+<p float="left">
+  <img src="https://user-images.githubusercontent.com/43148295/110990401-f2a44500-837b-11eb-9321-c6f09f433a46.png"/>
+  <img src="https://user-images.githubusercontent.com/43148295/110990790-7ceca900-837c-11eb-8788-3bae95c3bfc2.png"/> 
+  <img src="https://user-images.githubusercontent.com/43148295/110989823-1ca93780-837b-11eb-9bc9-3f84ef5103de.png"/>
+</p>
+
 ## How it should be pass:
 
 1. Вигрузити свій працюючий код на GitHub
