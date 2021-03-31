@@ -1,20 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../constants.dart';
+
 class Menu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    const MenuContent = [
-      [Icons.wb_incandescent_outlined, 'Функції та підказки'],
-      [Icons.help_outline, 'Питання та відповіді'],
-      [Icons.message_outlined, 'Служба підтримки'],
-      [Icons.content_copy, 'Копіювати номер пристрою'],
-      [Icons.settings_outlined, 'Налаштування'],
-      [Icons.info_outline, 'Про Дію'],
-      [Icons.ios_share, 'Розповісти друзям'],
-      [Icons.star_outline, 'Оцінити застосунок'],
-      [Icons.exit_to_app, 'Вийти'],
-    ];
-
     return ListView.separated(
       padding: const EdgeInsets.all(20.0),
       itemCount: MenuContent.length + 1,

@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'myIcons.dart';
 
+import 'constants.dart';
+import 'myIcons.dart';
 import 'mainWidgets/Documents.dart';
 import 'mainWidgets/Menu.dart';
 import 'mainWidgets/Messages.dart';
 import 'mainWidgets/Services.dart';
 
-void main() {
-  runApp(MainWidget());
-}
+void main() => runApp(MainWidget());
 
 class MainWidget extends StatefulWidget {
   @override
@@ -19,29 +18,11 @@ class _MainWidgetState extends State<MainWidget> {
   int pageNumber = 0;
   int documentsPageNumber = 0;
 
+  void callback(int i) => setState(() => documentsPageNumber = i);
+
   @override
   Widget build(BuildContext context) {
-    const colors = [
-      Colors.indigoAccent,
-      Colors.pinkAccent,
-      Colors.amberAccent,
-      Colors.blueGrey
-    ];
-
-    const BottomNavBarItems = [
-      [Icons.ballot_outlined, Icons.ballot, 'Документи'],
-      [Icons.offline_bolt_outlined, Icons.offline_bolt_rounded, 'Послуги'],
-      [Icons.notifications_none, Icons.notifications, 'Повідомлення'],
-      [Icons.menu, Icons.table_rows_rounded, 'Меню'],
-    ];
-
-    callback(int i) => setState(() => documentsPageNumber = i);
-    var mainWidgets = [
-      Documents(callback, colors, documentsPageNumber),
-      Services(),
-      Messages(),
-      Menu()
-    ];
+    var mainWidgets = [Documents(callback), Services(), Messages(), Menu()];
     var mainPage = mainWidgets[pageNumber];
     var title = pageNumber == 0 ? '' : BottomNavBarItems[pageNumber][2];
     var myGreyColor = documentsPageNumber != null
@@ -63,12 +44,6 @@ class _MainWidgetState extends State<MainWidget> {
           title: Text(
             title,
             style: TextStyle(
-              // shadows: [
-              //   Shadow(
-              //     color: Colors.red,
-              //     blurRadius: 20,
-              //   )
-              // ],
               color: Colors.black,
             ),
           ),
@@ -129,29 +104,6 @@ class _MainWidgetState extends State<MainWidget> {
                   label: BottomNavBarItems[i][2])
           ],
         ),
-        // ---------------------------------------------------------------------
-        // floatingActionButton: FloatingActionButton(
-        //   onPressed: null,
-        //   child: Icon(Icons.add),
-        // ),
-        // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        // ---------------------------------------------------------------------
-        // drawer: Drawer(
-        //   child: ListView(
-        //     children: [
-        //       DrawerHeader(
-        //         child: Text('Drawer Header'),
-        //       ),
-        //       ListTile(
-        //         title: Text('Item 1'),
-        //       ),
-        //       ListTile(
-        //         title: Text('Item 2'),
-        //       ),
-        //     ],
-        //   ),
-        // ),
-        // ---------------------------------------------------------------------
       ),
     );
   }
