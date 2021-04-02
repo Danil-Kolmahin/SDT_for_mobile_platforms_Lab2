@@ -1,19 +1,16 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:provider/provider.dart';
 
 import '../constants.dart';
 
-class Documents extends StatefulWidget {
+class Documents extends StatelessWidget {
+  final int documentsPageNumber;
   final Function callback;
 
-  Documents(this.callback);
-
-  @override
-  _DocumentsState createState() => _DocumentsState();
-}
-
-class _DocumentsState extends State<Documents> {
-  int _current = 0;
+  Documents(this.documentsPageNumber, this.callback);
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +21,11 @@ class _DocumentsState extends State<Documents> {
               options: CarouselOptions(
                 viewportFraction: 1,
                 onPageChanged: (index, reason) {
-                  setState(() {
-                    _current = index;
-                    widget.callback(index);
-                  });
+                  Provider.of<Function>(context, listen: false)(0.0);
+                  callback(index);
                 },
                 disableCenter: true,
-                initialPage: _current,
+                initialPage: documentsPageNumber,
                 enableInfiniteScroll: false,
               ),
               itemCount: documents.length,
@@ -47,7 +42,7 @@ class _DocumentsState extends State<Documents> {
                 margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: _current == index
+                  color: documentsPageNumber == index
                       ? Color.fromRGBO(0, 0, 0, 0.9)
                       : Color.fromRGBO(0, 0, 0, 0.4),
                 ),
@@ -58,69 +53,97 @@ class _DocumentsState extends State<Documents> {
   }
 }
 
-class StudentCard extends StatelessWidget {
+class StudentCard extends StatefulWidget {
   final int i;
 
   const StudentCard(this.i) : super();
 
   @override
+  _StudentCardState createState() => _StudentCardState();
+}
+
+class _StudentCardState extends State<StudentCard> {
+  bool isDocument = true;
+
+  @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 10,
-      color: Colors.blueGrey[200],
-      margin: EdgeInsets.all(30),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              documents[i][0],
-              style: TextStyle(fontSize: 25),
-            ),
-            SizedBox(
-              height: 120,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(documents[i][1]),
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.blueGrey[300],
-                        width: 1.5,
+    return GestureDetector(
+      onTap: () => setState(() {
+        Provider.of<Function>(context, listen: false)(isDocument ? 1.0 : 0.0);
+        return isDocument = !isDocument;
+      }),
+      child: Card(
+        elevation: 10,
+        color: Colors.blueGrey[200],
+        margin: EdgeInsets.all(30),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: isDocument
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      documents[widget.i][0],
+                      style: TextStyle(fontSize: 25),
+                    ),
+                    SizedBox(
+                      height: 120,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(documents[widget.i][1]),
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.blueGrey[300],
+                                width: 1.5,
+                              ),
+                            ),
+                            child: Image.network(
+                              documents[widget.i][4],
+                              width: 100,
+                              height: 200,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    child: Image.network(
-                      documents[i][4],
-                      width: 100,
-                      height: 200,
+                    Divider(
+                      thickness: 1,
+                      color: Colors.blueGrey[300],
                     ),
-                  ),
-                ],
-              ),
-            ),
-            Divider(
-              thickness: 1,
-              color: Colors.blueGrey[300],
-            ),
-            Text(documents[i][2]),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  documents[i][3],
-                  style: TextStyle(fontSize: 20),
+                    Text(documents[widget.i][2]),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          documents[widget.i][3],
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        Icon(Icons.more_horiz),
+                      ],
+                    ),
+                  ],
+                )
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text('коди діятимуть 3 хв'),
+                      ],
+                    ),
+                    Image.asset('./assets/QRCode.png'),
+                    Image.asset('./assets/barcode.png')
+                  ],
                 ),
-                Icon(Icons.more_horiz),
-              ],
-            ),
-          ],
         ),
       ),
     );
