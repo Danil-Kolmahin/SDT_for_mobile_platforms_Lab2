@@ -8,7 +8,6 @@ import 'mainWidgets/Documents.dart';
 import 'mainWidgets/Menu.dart';
 import 'mainWidgets/Messages.dart';
 import 'mainWidgets/Services.dart';
-import 'package:fake_action/State.dart';
 
 void main() => runApp(MainWidget());
 
@@ -23,7 +22,8 @@ class _MainWidgetState extends State<MainWidget> {
   double initialBrightness;
   double brightness;
 
-  void changeDocumentsPageNumber(int i) => setState(() => documentsPageNumber = i);
+  void changeDocumentsPageNumber(int i) =>
+      setState(() => documentsPageNumber = i);
 
   void setBrightness(b) {
     Screen.setBrightness(b);
@@ -65,7 +65,6 @@ class _MainWidgetState extends State<MainWidget> {
 
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => StateModel()),
         Provider<Function>(
             create: (context) => (newBrightness) => newBrightness == 1.0
                 ? setBrightness(1.0)
@@ -89,28 +88,20 @@ class _MainWidgetState extends State<MainWidget> {
             backgroundColor: myBlueGreyColor,
             leading: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Consumer<StateModel>(builder: (context, cart, child) {
-                return IconButton(
-                    icon: Icon(
-                      MyFlutterApp.a,
-                      size: 50,
-                      color: Colors.black,
-                    ),
-                    onPressed: () => cart.changeBrightness(2.0));
-              }),
+              child: Icon(
+                MyFlutterApp.a,
+                size: 50,
+                color: Colors.black,
+              ),
             ),
             actions: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Consumer<StateModel>(builder: (context, cart, child) {
-                  return IconButton(
-                      icon: Icon(
-                        Icons.qr_code_scanner,
-                        size: 25,
-                        color: Colors.black,
-                      ),
-                      onPressed: () => cart.changeBrightness(1.0));
-                }),
+                child: Icon(
+                  Icons.qr_code_scanner,
+                  size: 25,
+                  color: Colors.black,
+                ),
               ),
             ],
           ),
