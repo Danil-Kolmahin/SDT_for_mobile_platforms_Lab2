@@ -8,9 +8,9 @@ import '../constants.dart';
 
 class Documents extends StatelessWidget {
   final int documentsPageNumber;
-  final Function callback;
+  final Function changeDocumentsPageNumber;
 
-  Documents(this.documentsPageNumber, this.callback);
+  Documents(this.documentsPageNumber, this.changeDocumentsPageNumber);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class Documents extends StatelessWidget {
                 viewportFraction: 1,
                 onPageChanged: (index, reason) {
                   Provider.of<Function>(context, listen: false)(0.0);
-                  callback(index);
+                  changeDocumentsPageNumber(index);
                 },
                 disableCenter: true,
                 initialPage: documentsPageNumber,

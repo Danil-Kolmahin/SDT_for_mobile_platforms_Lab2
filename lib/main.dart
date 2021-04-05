@@ -23,7 +23,7 @@ class _MainWidgetState extends State<MainWidget> {
   double initialBrightness;
   double brightness;
 
-  void callback(int i) => setState(() => documentsPageNumber = i);
+  void changeDocumentsPageNumber(int i) => setState(() => documentsPageNumber = i);
 
   void setBrightness(b) {
     Screen.setBrightness(b);
@@ -49,7 +49,7 @@ class _MainWidgetState extends State<MainWidget> {
   @override
   Widget build(BuildContext context) {
     var mainWidgets = [
-      Documents(documentsPageNumber, callback),
+      Documents(documentsPageNumber, changeDocumentsPageNumber),
       Services(),
       Messages(),
       Menu()
