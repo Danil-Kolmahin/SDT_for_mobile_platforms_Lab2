@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -62,88 +63,139 @@ class StudentCard extends StatefulWidget {
   _StudentCardState createState() => _StudentCardState();
 }
 
-class _StudentCardState extends State<StudentCard> {
+class _StudentCardState extends State<StudentCard>
+    with SingleTickerProviderStateMixin {
   bool isDocument = true;
+
+  AnimationController _controller;
+  Animation<double> A;
+  // Animation<double> B;
+
+  @override
+  void initState() {
+    _controller =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 500));
+    A = Tween<double>(
+      begin: 0,
+      end: pi,
+    ).animate(_controller)
+    // B = Tween<double>(
+    //   begin: pi / 2,
+    //   end: pi,
+    // ).animate(_controller)
+      ..addListener(() {
+        setState(() {});
+      })
+      ..addStatusListener((state) {
+        if (state == AnimationStatus.forward ||
+            state == AnimationStatus.reverse)
+          Future.delayed(
+              Duration(milliseconds: 250),
+              () => setState(() {
+                    return isDocument = !isDocument;
+                  }));
+        // print(state);
+      });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => setState(() {
-        Provider.of<Function>(context, listen: false)(isDocument ? 1.0 : 0.0);
-        return isDocument = !isDocument;
-      }),
-      child: Card(
-        elevation: 10,
-        color: Colors.blueGrey[200],
-        margin: EdgeInsets.all(30),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: isDocument
-              ? Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      documents[widget.i][0],
-                      style: TextStyle(fontSize: 25),
-                    ),
-                    SizedBox(
-                      height: 120,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(documents[widget.i][1]),
-                          Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.blueGrey[300],
-                                width: 1.5,
+    return Transform(
+      alignment: FractionalOffset.center,
+      transform: Matrix4.identity()
+        ..setEntry(3, 2, 0.001)
+        ..rotateY(A.value),
+      child: GestureDetector(
+        onTap: () => setState(() {
+          Provider.of<Function>(context, listen: false)(isDocument ? 1.0 : 0.0);
+          isDocument ? _controller.forward() : _controller.reverse();
+        }),
+        child: Card(
+          elevation: 10,
+          color: Colors.blueGrey[200],
+          margin: EdgeInsets.all(30),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: isDocument
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        documents[widget.i][0],
+                        style: TextStyle(fontSize: 25),
+                      ),
+                      SizedBox(
+                        height: 120,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(documents[widget.i][1]),
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.blueGrey[300],
+                                  width: 1.5,
+                                ),
+                              ),
+                              child: Image.network(
+                                documents[widget.i][4],
+                                width: 100,
+                                height: 200,
                               ),
                             ),
-                            child: Image.network(
-                              documents[widget.i][4],
-                              width: 100,
-                              height: 200,
-                            ),
+                          ],
+                        ),
+                      ),
+                      Divider(
+                        thickness: 1,
+                        color: Colors.blueGrey[300],
+                      ),
+                      Text(documents[widget.i][2]),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            documents[widget.i][3],
+                            style: TextStyle(fontSize: 20),
                           ),
+                          Icon(Icons.more_horiz),
                         ],
                       ),
-                    ),
-                    Divider(
-                      thickness: 1,
-                      color: Colors.blueGrey[300],
-                    ),
-                    Text(documents[widget.i][2]),
-                    Row(
+                    ],
+                  )
+                : Transform(
+              alignment: FractionalOffset.center,
+              transform: Matrix4.identity()
+                ..setEntry(3, 2, 0.001)
+                ..rotateY(pi),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          documents[widget.i][3],
-                          style: TextStyle(fontSize: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text('коди діятимуть 3 хв'),
+                          ],
                         ),
-                        Icon(Icons.more_horiz),
+                        Image.asset('./assets/QRCode.png'),
+                        Image.asset('./assets/barcode.png')
                       ],
                     ),
-                  ],
-                )
-              : Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text('коди діятимуть 3 хв'),
-                      ],
-                    ),
-                    Image.asset('./assets/QRCode.png'),
-                    Image.asset('./assets/barcode.png')
-                  ],
                 ),
+          ),
         ),
       ),
     );
