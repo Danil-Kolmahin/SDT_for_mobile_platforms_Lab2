@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:screen/screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'constants.dart';
 import 'myIcons.dart';
@@ -21,6 +22,8 @@ class _MainWidgetState extends State<MainWidget> {
   int documentsPageNumber = 0;
   double initialBrightness;
   double brightness;
+
+  bool isBlack = true;
 
   void changeDocumentsPageNumber(int i) =>
       setState(() => documentsPageNumber = i);
@@ -44,6 +47,19 @@ class _MainWidgetState extends State<MainWidget> {
   initState() {
     super.initState();
     initPlatformState();
+    _takeThemeColor();
+  }
+
+  Future<void> _takeThemeColor() async {
+    final prefs = await SharedPreferences.getInstance();
+    final takenIsBlack = prefs.getBool('themeColorIsBlack');
+    setState(() => isBlack = takenIsBlack ?? true);
+  }
+
+  Future<void> _changeThemeColor(bool newIsBlack) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('themeColorIsBlack', newIsBlack);
+    setState(() => isBlack = newIsBlack);
   }
 
   @override
@@ -63,6 +79,8 @@ class _MainWidgetState extends State<MainWidget> {
         ? colors[documentsPageNumber]
         : Colors.blueGrey[200];
 
+    Color themeColor = isBlack ? Colors.black : Colors.white;
+
     return MultiProvider(
       providers: [
         Provider<Function>(
@@ -71,6 +89,7 @@ class _MainWidgetState extends State<MainWidget> {
                 : setBrightness(initialBrightness))
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primaryColor: myBlueGreyColor,
         ),
@@ -82,7 +101,7 @@ class _MainWidgetState extends State<MainWidget> {
             title: Text(
               title,
               style: TextStyle(
-                color: Colors.black,
+                color: themeColor,
               ),
             ),
             backgroundColor: myBlueGreyColor,
@@ -91,16 +110,19 @@ class _MainWidgetState extends State<MainWidget> {
               child: Icon(
                 MyFlutterApp.a,
                 size: 50,
-                color: Colors.black,
+                color: themeColor,
               ),
             ),
             actions: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Icon(
-                  Icons.qr_code_scanner,
-                  size: 25,
-                  color: Colors.black,
+                child: IconButton(
+                   icon: Icon(
+                     Icons.qr_code_scanner,
+                     size: 25,
+                     color: themeColor,
+                   ),
+                  onPressed: () => _changeThemeColor(!isBlack),
                 ),
               ),
             ],
@@ -112,8 +134,8 @@ class _MainWidgetState extends State<MainWidget> {
             selectedFontSize: 12,
             unselectedFontSize: 12,
             type: BottomNavigationBarType.fixed,
-            selectedItemColor: Colors.black,
-            unselectedItemColor: Colors.black,
+            selectedItemColor: themeColor,
+            unselectedItemColor: themeColor,
             currentIndex: pageNumber,
             backgroundColor: myGreyColor,
             items: [

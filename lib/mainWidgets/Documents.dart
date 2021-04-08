@@ -7,11 +7,24 @@ import 'package:provider/provider.dart';
 
 import '../constants.dart';
 
-class Documents extends StatelessWidget {
+class Documents extends StatefulWidget {
   final int documentsPageNumber;
   final Function changeDocumentsPageNumber;
 
   Documents(this.documentsPageNumber, this.changeDocumentsPageNumber);
+
+  @override
+  _DocumentsState createState() => _DocumentsState();
+}
+
+class _DocumentsState extends State<Documents> {
+  List<MyDocument> documents = [];
+
+  @override
+  void initState() {
+    parseJson().then((value) => setState(() => documents = value));
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,15 +36,15 @@ class Documents extends StatelessWidget {
                 viewportFraction: 1,
                 onPageChanged: (index, reason) {
                   Provider.of<Function>(context, listen: false)(0.0);
-                  changeDocumentsPageNumber(index);
+                  widget.changeDocumentsPageNumber(index);
                 },
                 disableCenter: true,
-                initialPage: documentsPageNumber,
+                initialPage: widget.documentsPageNumber,
                 enableInfiniteScroll: false,
               ),
               itemCount: documents.length,
               itemBuilder: (BuildContext context, int i, int _) =>
-                  StudentCard(i)),
+                  StudentCard(documents[i])),
         ),
         Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -43,7 +56,7 @@ class Documents extends StatelessWidget {
                 margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: documentsPageNumber == index
+                  color: widget.documentsPageNumber == index
                       ? Color.fromRGBO(0, 0, 0, 0.9)
                       : Color.fromRGBO(0, 0, 0, 0.4),
                 ),
@@ -55,9 +68,9 @@ class Documents extends StatelessWidget {
 }
 
 class StudentCard extends StatefulWidget {
-  final int i;
+  final MyDocument document;
 
-  const StudentCard(this.i) : super();
+  const StudentCard(this.document) : super();
 
   @override
   _StudentCardState createState() => _StudentCardState();
@@ -69,6 +82,7 @@ class _StudentCardState extends State<StudentCard>
 
   AnimationController _controller;
   Animation<double> A;
+
   // Animation<double> B;
 
   @override
@@ -79,10 +93,10 @@ class _StudentCardState extends State<StudentCard>
       begin: 0,
       end: pi,
     ).animate(_controller)
-    // B = Tween<double>(
-    //   begin: pi / 2,
-    //   end: pi,
-    // ).animate(_controller)
+      // B = Tween<double>(
+      //   begin: pi / 2,
+      //   end: pi,
+      // ).animate(_controller)
       ..addListener(() {
         setState(() {});
       })
@@ -132,7 +146,7 @@ class _StudentCardState extends State<StudentCard>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        documents[widget.i][0],
+                        widget.document.documentName ?? '',
                         style: TextStyle(fontSize: 25),
                       ),
                       SizedBox(
@@ -141,7 +155,7 @@ class _StudentCardState extends State<StudentCard>
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text(documents[widget.i][1]),
+                            Text(widget.document.documentStatus ?? ''),
                             Container(
                               decoration: BoxDecoration(
                                 border: Border.all(
@@ -150,7 +164,7 @@ class _StudentCardState extends State<StudentCard>
                                 ),
                               ),
                               child: Image.network(
-                                documents[widget.i][4],
+                                widget.document.imgUrl ?? 'https://gravatar.com/avatar/bce18aaf194be855b91e09589607edeb?s=400&d=robohash&r=x',
                                 width: 100,
                                 height: 200,
                               ),
@@ -162,12 +176,12 @@ class _StudentCardState extends State<StudentCard>
                         thickness: 1,
                         color: Colors.blueGrey[300],
                       ),
-                      Text(documents[widget.i][2]),
+                      Text(widget.document.studyPlace ?? ''),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            documents[widget.i][3],
+                            widget.document.userName ?? '',
                             style: TextStyle(fontSize: 20),
                           ),
                           Icon(Icons.more_horiz),
@@ -176,11 +190,11 @@ class _StudentCardState extends State<StudentCard>
                     ],
                   )
                 : Transform(
-              alignment: FractionalOffset.center,
-              transform: Matrix4.identity()
-                ..setEntry(3, 2, 0.001)
-                ..rotateY(pi),
-                  child: Column(
+                    alignment: FractionalOffset.center,
+                    transform: Matrix4.identity()
+                      ..setEntry(3, 2, 0.001)
+                      ..rotateY(pi),
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -194,7 +208,7 @@ class _StudentCardState extends State<StudentCard>
                         Image.asset('./assets/barcode.png')
                       ],
                     ),
-                ),
+                  ),
           ),
         ),
       ),
