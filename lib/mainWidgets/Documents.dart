@@ -83,8 +83,6 @@ class _StudentCardState extends State<StudentCard>
   AnimationController _controller;
   Animation<double> A;
 
-  // Animation<double> B;
-
   @override
   void initState() {
     _controller =
@@ -93,10 +91,6 @@ class _StudentCardState extends State<StudentCard>
       begin: 0,
       end: pi,
     ).animate(_controller)
-      // B = Tween<double>(
-      //   begin: pi / 2,
-      //   end: pi,
-      // ).animate(_controller)
       ..addListener(() {
         setState(() {});
       })
