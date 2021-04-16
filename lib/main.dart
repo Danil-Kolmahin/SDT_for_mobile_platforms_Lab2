@@ -64,69 +64,125 @@ class _MainWidgetState extends State<MainWidget> {
     setState(() => isBlack = newIsBlack);
   }
 
-  void onPressed(i, context) => setState(() {
-        Navigator.of(context, rootNavigator: true).pushNamed(widget.arr[i]);
-        pageNumber = i;
-        i == 0 ? documentsPageNumber = 0 : documentsPageNumber = null;
-      });
-
   @override
   Widget build(BuildContext context) {
     var myBlueGreyColor = documentsPageNumber != null
         ? colors[documentsPageNumber]
         : Colors.blueGrey[200];
 
-    return MultiProvider(
-      providers: [
-        Provider<Function>(
-            create: (context) => (newBrightness) => newBrightness == 1.0
-                ? setBrightness(1.0)
-                : setBrightness(initialBrightness))
-      ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primaryColor: myBlueGreyColor,
-        ),
-        title: 'Дія',
-        initialRoute: '/documents',
-        routes: {
-          '/documents': (BuildContext context) => BuildScaffold(
-              pageNumber,
-              documentsPageNumber,
-              isBlack,
-              _changeThemeColor,
-              onPressed,
+    final routes = [ (BuildContext context, onPressed, text) {
+      print(text);
+      return BuildScaffold(
+          pageNumber,
+          documentsPageNumber,
+          isBlack,
+          _changeThemeColor,
+          onPressed,
+          Documents(documentsPageNumber, changeDocumentsPageNumber));
+    },
+          (BuildContext context, onPressed, text) {
+        print(text);
+        return BuildScaffold(
+            pageNumber,
+            documentsPageNumber,
+            isBlack,
+            _changeThemeColor,
+            onPressed,
+            Services());
+      },
+          (BuildContext context, onPressed, text) {
+        print(text);
+        return BuildScaffold(
+            pageNumber,
+            documentsPageNumber,
+            isBlack,
+            _changeThemeColor,
+            onPressed,
+            Messages());
+      },
+          (BuildContext context, onPressed, text) {
+        print(text);
+        return BuildScaffold(
+            pageNumber,
+            documentsPageNumber,
+            isBlack,
+            _changeThemeColor,
+            onPressed,
+            Menu());
+      },
+    ];
+
+    void onPressed(i, context) async {
+      setState(() {
+        // Navigator.of(context, rootNavigator: true).pushNamed(widget.arr[i]);
+        pageNumber = i;
+        i == 0 ? documentsPageNumber = 0 : documentsPageNumber = null;
+      });
+      final result = await Navigator.of(context, rootNavigator: true).push(
+        MaterialPageRoute(builder: (context) =>
+            routes[i](context, onPressed, 'was pushed to $i')),
+      );
+      print(result);
+    }
+
+      return MultiProvider(
+        providers: [
+          Provider<Function>(
+              create: (context) =>
+                  (newBrightness) =>
+              newBrightness == 1.0
+                  ? setBrightness(1.0)
+                  : setBrightness(initialBrightness))
+        ],
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primaryColor: myBlueGreyColor,
+          ),
+          title: 'Дія',
+          // initialRoute: '/documents',
+          // routes: {
+          //   '/documents': (BuildContext context) =>
+          //       BuildScaffold(
+          //           pageNumber,
+          //           documentsPageNumber,
+          //           isBlack,
+          //           _changeThemeColor,
+          //           onPressed,
+          //           Documents(documentsPageNumber, changeDocumentsPageNumber)),
+          //   '/services': (BuildContext context) =>
+          //       BuildScaffold(
+          //           pageNumber,
+          //           documentsPageNumber,
+          //           isBlack,
+          //           _changeThemeColor,
+          //           onPressed,
+          //           Services()),
+          //   '/messages': (BuildContext context) =>
+          //       BuildScaffold(
+          //           pageNumber,
+          //           documentsPageNumber,
+          //           isBlack,
+          //           _changeThemeColor,
+          //           onPressed,
+          //           Messages()),
+          //   '/menu': (BuildContext context) =>
+          //       BuildScaffold(
+          //           pageNumber,
+          //           documentsPageNumber,
+          //           isBlack,
+          //           _changeThemeColor,
+          //           onPressed,
+          //           Menu()),
+          // },
+          home: BuildScaffold(pageNumber,
+              documentsPageNumber, isBlack, _changeThemeColor, onPressed,
               Documents(documentsPageNumber, changeDocumentsPageNumber)),
-          '/services': (BuildContext context) => BuildScaffold(
-              pageNumber,
-              documentsPageNumber,
-              isBlack,
-              _changeThemeColor,
-              onPressed,
-              Services()),
-          '/messages': (BuildContext context) => BuildScaffold(
-              pageNumber,
-              documentsPageNumber,
-              isBlack,
-              _changeThemeColor,
-              onPressed,
-              Messages()),
-          '/menu': (BuildContext context) => BuildScaffold(
-              pageNumber,
-              documentsPageNumber,
-              isBlack,
-              _changeThemeColor,
-              onPressed,
-              Menu()),
-        },
-        // home: BuildScaffold(pageNumber,
-        //     documentsPageNumber, isBlack, _changeThemeColor, onPressed,
-        //     Documents(documentsPageNumber, changeDocumentsPageNumber)),
-      ),
-    );
+        ),
+      );
+    }
   }
-}
+// }
 
 class BuildScaffold extends StatelessWidget {
   final pageNumber;
@@ -169,7 +225,8 @@ class BuildScaffold extends StatelessWidget {
               size: 50,
               color: themeColor,
             ),
-            onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
+            onPressed: () =>
+                Navigator.of(context, rootNavigator: true).pop('was poped'),
           ),
         ),
         actions: [
