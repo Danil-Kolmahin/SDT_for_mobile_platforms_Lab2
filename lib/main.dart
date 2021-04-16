@@ -65,7 +65,7 @@ class _MainWidgetState extends State<MainWidget> {
   }
 
   void onPressed(i, context) => setState(() {
-        Navigator.of(context).pushReplacementNamed(widget.arr[i]);
+        Navigator.of(context, rootNavigator: true).pushNamed(widget.arr[i]);
         pageNumber = i;
         i == 0 ? documentsPageNumber = 0 : documentsPageNumber = null;
       });
@@ -169,7 +169,7 @@ class BuildScaffold extends StatelessWidget {
               size: 50,
               color: themeColor,
             ),
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
           ),
         ),
         actions: [
