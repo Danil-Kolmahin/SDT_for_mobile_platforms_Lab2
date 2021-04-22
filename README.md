@@ -22,7 +22,7 @@
 12) Анімація повинна реалізовувати певний рух, зміну положення. Цей рух можна зациклити
 
 ## Realization
-<p display="block" margin="auto">
+<p style="display:block;text-align:center">
     <img src="https://user-images.githubusercontent.com/43148295/115681117-e3da8600-a35c-11eb-8649-b5c4d639f6d5.gif"/>
 </p>
 
